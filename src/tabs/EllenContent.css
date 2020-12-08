@@ -1,0 +1,9 @@
+.tableContainer {
+  max-width: 55rem;
+  margin: auto;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}

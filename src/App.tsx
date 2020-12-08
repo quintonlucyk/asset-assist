@@ -1,26 +1,76 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Tabs, Tab, TextField, Button } from "@material-ui/core";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { useQuery, QueryCache, ReactQueryCacheProvider } from "react-query";
+import QuintonContent from "./tabs/QuintonContent";
+import EllenContent from "./tabs/EllenContent";
+import "./App.css";
+import { fetchHistoricalData } from "./requests/historicalData";
+import { HISTORICAL_DATA } from "./constants";
 
-function App() {
+const queryCache = new QueryCache();
+
+export default function App() {
+  const [input, setInput] = React.useState("");
+  const [symbol, setSymbol] = React.useState("");
+  const { data, isLoading, isError } = useQuery(
+    [HISTORICAL_DATA, symbol],
+    fetchHistoricalData,
+    { enabled: !!symbol }
+  );
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(event.currentTarget.value);
+  };
+
+  const handleSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setSymbol(input);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ReactQueryCacheProvider queryCache={queryCache}>
+      <Router>
+        <Route
+          path="/"
+          render={({ location }) => (
+            <>
+              <Tabs
+                value={location.pathname === "/ellen" ? 1 : 0}
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+              >
+                <Tab label="Quinton" component={Link} to="/" />
+                <Tab label="Ellen" component={Link} to="/ellen" />
+              </Tabs>
+              <div className="symbolInput">
+                <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+                  <TextField
+                    onChange={handleInputChange}
+                    name="symbolInput"
+                    placeholder="Symbol"
+                  />
+                  <Button type="submit">Search</Button>
+                </form>
+              </div>
+              <Switch>
+                <Route
+                  path="/ellen"
+                  render={() => (
+                    <EllenContent
+                      data={data}
+                      isLoading={isLoading}
+                      isError={isError}
+                    />
+                  )}
+                />
+                <Route path="/" render={() => <QuintonContent />} />
+              </Switch>
+            </>
+          )}
+        />
+      </Router>
+    </ReactQueryCacheProvider>
   );
 }
-
-export default App;
