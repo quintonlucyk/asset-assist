@@ -1,12 +1,18 @@
 import React from "react";
 import { Tabs, Tab, TextField, Button } from "@material-ui/core";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 import { useQuery, QueryCache, ReactQueryCacheProvider } from "react-query";
 import QuintonContent from "./tabs/QuintonContent";
 import EllenContent from "./tabs/EllenContent";
 import "./App.css";
 import { fetchHistoricalData } from "./requests/historicalData";
-import { HISTORICAL_DATA } from "./constants";
+import { BASE_PATH, HISTORICAL_DATA } from "./constants";
 
 const queryCache = new QueryCache();
 
@@ -40,13 +46,13 @@ export default function App() {
           render={({ location }) => (
             <>
               <Tabs
-                value={location.pathname === "/ellen" ? 1 : 0}
+                value={location.pathname === BASE_PATH + "/ellen" ? 1 : 0}
                 indicatorColor="primary"
                 textColor="primary"
                 centered
               >
-                <Tab label="Quinton" component={Link} to="/" />
-                <Tab label="Ellen" component={Link} to="/ellen" />
+                <Tab label="Quinton" component={Link} to={BASE_PATH + "/"} />
+                <Tab label="Ellen" component={Link} to={BASE_PATH + "/ellen"} />
               </Tabs>
               <div className="symbolInput">
                 <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -60,7 +66,7 @@ export default function App() {
               </div>
               <Switch>
                 <Route
-                  path="/ellen"
+                  path={BASE_PATH + "/ellen"}
                   render={() => (
                     <EllenContent
                       data={data}
@@ -69,7 +75,11 @@ export default function App() {
                     />
                   )}
                 />
-                <Route path="/" render={() => <QuintonContent />} />
+                <Route
+                  path={BASE_PATH + "/"}
+                  render={() => <QuintonContent />}
+                />
+                <Redirect to={BASE_PATH + "/"} />
               </Switch>
             </>
           )}
