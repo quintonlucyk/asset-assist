@@ -1,4 +1,5 @@
 import { SampleAppleData } from "../sample-responses/AppleData";
+import { SampleATATData } from "../sample-responses/ATATData";
 
 const inDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
@@ -10,7 +11,9 @@ export const fetchHistoricalData = async (key: string, symbol: string) => {
   }
   try {
     if (inDev) {
-      return SampleAppleData;
+      return Math.floor(Math.random() * 10 + 1) % 2 === 0
+        ? SampleAppleData
+        : SampleATATData;
     }
 
     const res = await fetch(
