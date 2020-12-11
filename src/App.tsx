@@ -1,12 +1,6 @@
 import React from "react";
 import { Tabs, Tab, TextField, Button } from "@material-ui/core";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useQuery, QueryCache, ReactQueryCacheProvider } from "react-query";
 import QuintonContent from "./tabs/QuintonContent";
 import EllenContent from "./tabs/EllenContent";
@@ -38,7 +32,7 @@ export default function App() {
     <ReactQueryCacheProvider queryCache={queryCache}>
       <Router>
         <Route
-          path="/"
+          path={BASE_PATH}
           render={({ location }) => (
             <>
               <Tabs
@@ -75,7 +69,6 @@ export default function App() {
                   path={BASE_PATH + "/"}
                   render={() => <QuintonContent />}
                 />
-                <Redirect to={BASE_PATH + "/"} />
               </Switch>
             </>
           )}
