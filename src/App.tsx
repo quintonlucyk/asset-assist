@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs, Tab, TextField, Button } from "@material-ui/core";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { HashRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useQuery, QueryCache, ReactQueryCacheProvider } from "react-query";
 import QuintonContent from "./tabs/QuintonContent";
 import EllenContent from "./tabs/EllenContent";
@@ -32,17 +32,17 @@ export default function App() {
     <ReactQueryCacheProvider queryCache={queryCache}>
       <Router>
         <Route
-          path={BASE_PATH}
+          path="/"
           render={({ location }) => (
             <>
               <Tabs
-                value={location.pathname === BASE_PATH + "/ellen" ? 1 : 0}
+                value={location.pathname === "/ellen" ? 1 : 0}
                 indicatorColor="primary"
                 textColor="primary"
                 centered
               >
-                <Tab label="Quinton" component={Link} to={BASE_PATH + "/"} />
-                <Tab label="Ellen" component={Link} to={BASE_PATH + "/ellen"} />
+                <Tab label="Quinton" component={Link} to="/" />
+                <Tab label="Ellen" component={Link} to="/ellen" />
               </Tabs>
               <div className="symbolInput">
                 <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -56,7 +56,7 @@ export default function App() {
               </div>
               <Switch>
                 <Route
-                  path={BASE_PATH + "/ellen"}
+                  path="/ellen"
                   render={() => (
                     <EllenContent
                       data={data}
@@ -65,10 +65,7 @@ export default function App() {
                     />
                   )}
                 />
-                <Route
-                  path={BASE_PATH + "/"}
-                  render={() => <QuintonContent />}
-                />
+                <Route path="/" render={() => <QuintonContent />} />
               </Switch>
             </>
           )}
