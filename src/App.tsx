@@ -19,6 +19,10 @@ export default function App() {
     { enabled: !!symbol }
   );
 
+  React.useEffect(() => {
+    console.log("data", JSON.stringify(data));
+  }, [data]);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(event.currentTarget.value);
   };
