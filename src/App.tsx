@@ -6,7 +6,7 @@ import QuintonContent from "./tabs/QuintonContent";
 import EllenContent from "./tabs/EllenContent";
 import "./App.css";
 import { fetchHistoricalData } from "./requests/historicalData";
-import { BASE_PATH, HISTORICAL_DATA } from "./constants";
+import { HISTORICAL_DATA } from "./constants";
 
 const queryCache = new QueryCache();
 

@@ -112,7 +112,6 @@ const EllenContent: React.FC<Props> = React.memo(
     if (!!data) {
       return (
         <>
-          {/* <pre>{JSON.stringify(data, null, 4)}</pre> */}
           <TableContainer className="tableContainer">
             <Table>
               <TableHead>
@@ -144,7 +143,7 @@ const EllenContent: React.FC<Props> = React.memo(
         </>
       );
     }
-    return <div className="center">No data available...</div>;
+    return <div className="center">No data loaded/available.</div>;
   }
 );
 
