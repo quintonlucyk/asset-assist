@@ -76,10 +76,14 @@ const EllenTable: React.FC<EllenTableProps> = ({ header, rows }) => {
                 <StyledTableRow key={row.date}>
                   <StyledTableCell>{row.date}</StyledTableCell>
                   <StyledTableCell align="right">
-                    {row.dividend}
+                    {"$ " + row.dividend}
                   </StyledTableCell>
-                  <StyledTableCell align="right">{row.share}</StyledTableCell>
-                  <StyledTableCell align="right">{row.yild}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    {"$ " + row.share}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {row.yild + " %"}
+                  </StyledTableCell>
                   <StyledTableCell align="right">
                     <Checkbox
                       defaultChecked
@@ -92,7 +96,7 @@ const EllenTable: React.FC<EllenTableProps> = ({ header, rows }) => {
             </TableBody>
           </Table>
         </TableContainer>
-        <div>
+        <div className="yildCalcs">
           <AverageYild used={false} rowsExcluded={emptyArray} rows={rows} />
           <AverageYild used={true} rowsExcluded={rowsExcluded} rows={rows} />
         </div>

@@ -1,4 +1,13 @@
 .tableContainer {
-  max-width: 35rem;
+  max-width: 50rem;
   margin: 3em auto;
+}
+
+.custFlex {
+  display: flex;
+}
+
+.yildCalcs {
+  width: 15rem;
+  margin: auto 0 auto 1em;
 }
