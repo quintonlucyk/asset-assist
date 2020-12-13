@@ -15,12 +15,10 @@ import { DIVIDEND } from "../constants";
 function createData(
   date: string,
   dividend: string,
-  lowShare: string,
-  highYield: string,
-  highShare: string,
-  lowYield: string
+  share: string,
+  yild: string
 ) {
-  return { date, dividend, lowShare, highYield, highShare, lowYield };
+  return { date, dividend, share, yild };
 }
 
 interface DataInterface {
@@ -42,10 +40,8 @@ interface DataInterface {
 interface RowInterface {
   date: string;
   dividend: string;
-  lowShare: string;
-  highYield: string;
-  highShare: string;
-  lowYield: string;
+  share: string;
+  yild: string;
 }
 
 interface Props {
@@ -56,10 +52,12 @@ interface Props {
 
 const EllenContent: React.FC<Props> = React.memo(
   ({ data, isLoading, isError }) => {
-    const [rows, setRows] = React.useState<RowInterface[]>([]);
+    const [lowYildRows, setLowYildRows] = React.useState<RowInterface[]>([]);
+    const [highYildRows, setHighYildRows] = React.useState<RowInterface[]>([]);
 
     React.useEffect(() => {
-      let nextRows: RowInterface[] = [];
+      let nextLowRows: RowInterface[] = [];
+      let nextHighRows: RowInterface[] = [];
       data?.prices?.forEach((entry, i, prices) => {
         if (entry.type === DIVIDEND) {
           let found = null;
@@ -79,22 +77,30 @@ const EllenContent: React.FC<Props> = React.memo(
             !!prices[i + found].low &&
             !!prices[i + found].high
           ) {
-            nextRows.push(
+            nextLowRows.push(
+              createData(
+                moment(entry.date * 1000).format("MMM DD YYYY"),
+                "$ " + entry.amount.toFixed(4),
+                "$ " + prices[i + found].high!.toFixed(4),
+                ((entry.amount! / prices[i + found].high!) * 100).toFixed(4) +
+                  " %"
+              )
+            );
+
+            nextHighRows.push(
               createData(
                 moment(entry.date * 1000).format("MMM DD YYYY"),
                 "$ " + entry.amount.toFixed(4),
                 "$ " + prices[i + found].low!.toFixed(4),
                 ((entry.amount! / prices[i + found].low!) * 100).toFixed(4) +
-                  " %",
-                "$ " + prices[i + found].high!.toFixed(4),
-                ((entry.amount! / prices[i + found].high!) * 100).toFixed(4) +
                   " %"
               )
             );
           }
         }
       });
-      setRows(nextRows);
+      setLowYildRows(nextLowRows);
+      setHighYildRows(nextHighRows);
     }, [data]);
 
     if (isLoading) {
@@ -118,23 +124,33 @@ const EllenContent: React.FC<Props> = React.memo(
                 <TableRow>
                   <TableCell>Date </TableCell>
                   <TableCell align="right">Dividend</TableCell>
-                  <TableCell align="right">Low Share</TableCell>
-                  <TableCell align="right">High Yield</TableCell>
-                  <TableCell align="right">High Share</TableCell>
-                  <TableCell align="right">Low Yield</TableCell>
+                  <TableCell align="right">Share</TableCell>
+                  <TableCell align="right">Yield</TableCell>
                 </TableRow>
               </TableHead>
+              <h4>Low Yield</h4>
               <TableBody>
-                {rows.map((row) => (
+                {lowYildRows.map((row) => (
                   <TableRow key={row.date}>
                     <TableCell component="th" scope="row">
                       {row.date}
                     </TableCell>
                     <TableCell align="right">{row.dividend}</TableCell>
-                    <TableCell align="right">{row.lowShare}</TableCell>
-                    <TableCell align="right">{row.highYield}</TableCell>
-                    <TableCell align="right">{row.highShare}</TableCell>
-                    <TableCell align="right">{row.lowYield}</TableCell>
+                    <TableCell align="right">{row.share}</TableCell>
+                    <TableCell align="right">{row.yild}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <h4>High Yield</h4>
+              <TableBody>
+                {highYildRows.map((row) => (
+                  <TableRow key={row.date}>
+                    <TableCell component="th" scope="row">
+                      {row.date}
+                    </TableCell>
+                    <TableCell align="right">{row.dividend}</TableCell>
+                    <TableCell align="right">{row.share}</TableCell>
+                    <TableCell align="right">{row.yild}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
