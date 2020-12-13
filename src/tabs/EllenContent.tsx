@@ -1,24 +1,17 @@
 import * as React from "react";
 import moment from "moment";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  CircularProgress,
-} from "@material-ui/core";
-import "./EllenContent.css";
+import { CircularProgress } from "@material-ui/core";
 import { DIVIDEND } from "../constants";
+import EllenTable from "../components/EllenTable";
 
 function createData(
+  id: number,
   date: string,
   dividend: string,
   share: string,
   yild: string
 ) {
-  return { date, dividend, share, yild };
+  return { id, date, dividend, share, yild };
 }
 
 interface DataInterface {
@@ -37,7 +30,8 @@ interface DataInterface {
     }
   ];
 }
-interface RowInterface {
+export interface RowInterface {
+  id: number;
   date: string;
   dividend: string;
   share: string;
@@ -79,21 +73,21 @@ const EllenContent: React.FC<Props> = React.memo(
           ) {
             nextLowRows.push(
               createData(
+                nextLowRows.length,
                 moment(entry.date * 1000).format("MMM DD YYYY"),
-                "$ " + entry.amount.toFixed(4),
-                "$ " + prices[i + found].high!.toFixed(4),
-                ((entry.amount! / prices[i + found].high!) * 100).toFixed(4) +
-                  " %"
+                entry.amount.toFixed(4),
+                prices[i + found].high!.toFixed(4),
+                ((entry.amount! / prices[i + found].high!) * 100).toFixed(4)
               )
             );
 
             nextHighRows.push(
               createData(
+                nextHighRows.length,
                 moment(entry.date * 1000).format("MMM DD YYYY"),
-                "$ " + entry.amount.toFixed(4),
-                "$ " + prices[i + found].low!.toFixed(4),
-                ((entry.amount! / prices[i + found].low!) * 100).toFixed(4) +
-                  " %"
+                entry.amount.toFixed(4),
+                prices[i + found].low!.toFixed(4),
+                ((entry.amount! / prices[i + found].low!) * 100).toFixed(4)
               )
             );
           }
@@ -118,44 +112,8 @@ const EllenContent: React.FC<Props> = React.memo(
     if (!!data) {
       return (
         <>
-          <TableContainer className="tableContainer">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Date </TableCell>
-                  <TableCell align="right">Dividend</TableCell>
-                  <TableCell align="right">Share</TableCell>
-                  <TableCell align="right">Yield</TableCell>
-                </TableRow>
-              </TableHead>
-              <h4>Low Yield</h4>
-              <TableBody>
-                {lowYildRows.map((row) => (
-                  <TableRow key={row.date}>
-                    <TableCell component="th" scope="row">
-                      {row.date}
-                    </TableCell>
-                    <TableCell align="right">{row.dividend}</TableCell>
-                    <TableCell align="right">{row.share}</TableCell>
-                    <TableCell align="right">{row.yild}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-              <h4>High Yield</h4>
-              <TableBody>
-                {highYildRows.map((row) => (
-                  <TableRow key={row.date}>
-                    <TableCell component="th" scope="row">
-                      {row.date}
-                    </TableCell>
-                    <TableCell align="right">{row.dividend}</TableCell>
-                    <TableCell align="right">{row.share}</TableCell>
-                    <TableCell align="right">{row.yild}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <EllenTable header="Low Yield" rows={lowYildRows} />
+          <EllenTable header="High Yield" rows={highYildRows} />
         </>
       );
     }
