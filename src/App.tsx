@@ -23,8 +23,7 @@ export default function App() {
     setInput(event.currentTarget.value);
   };
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (input !== symbol) {
       setSymbol(input);
       refetch();
