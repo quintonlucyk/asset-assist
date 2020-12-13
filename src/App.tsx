@@ -25,8 +25,10 @@ export default function App() {
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setSymbol(input);
-    refetch();
+    if (input !== symbol) {
+      setSymbol(input);
+      refetch();
+    }
   };
 
   return (
