@@ -13,10 +13,10 @@ const queryCache = new QueryCache();
 export default function App() {
   const [input, setInput] = React.useState("");
   const [symbol, setSymbol] = React.useState("");
-  const { data, isLoading, isError } = useQuery(
+  const { data, isLoading, isError, refetch } = useQuery(
     [HISTORICAL_DATA, symbol],
     fetchHistoricalData,
-    { enabled: !!symbol }
+    { enabled: false }
   );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -26,6 +26,7 @@ export default function App() {
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     setSymbol(input);
+    refetch();
   };
 
   return (
