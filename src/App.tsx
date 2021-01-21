@@ -64,6 +64,7 @@ export default function App() {
 
     const fetchQuintonHistoricalData = async (symbol: string) => {
       const FMPAPI_KEY = process.env.REACT_APP_FMPAPI_KEY || "";
+      const FMPAPITWO_KEY = process.env.REACT_APP_FMPAPITWO_KEY || "";
       setIsLoading(true);
       if (inDev) {
         setIsLoading(false);
@@ -83,10 +84,10 @@ export default function App() {
           `https://fmpcloud.io/api/v3/key-metrics/${symbol}?limit=10&apikey=${FMPAPI_KEY}`
         ),
         fetch(
-          `https://fmpcloud.io/api/v3/balance-sheet-statement-growth/${symbol}?limit=10&apikey=${FMPAPI_KEY}`
+          `https://fmpcloud.io/api/v3/balance-sheet-statement-growth/${symbol}?limit=10&apikey=${FMPAPITWO_KEY}`
         ),
         fetch(
-          `https://fmpcloud.io/api/v3/cash-flow-statement-growth/${symbol}?limit=10&apikey=${FMPAPI_KEY}`
+          `https://fmpcloud.io/api/v3/cash-flow-statement-growth/${symbol}?limit=10&apikey=${FMPAPITWO_KEY}`
         ),
       ];
 
