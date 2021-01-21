@@ -80,8 +80,8 @@ export default function App() {
           `https://fmpcloud.io/api/v3/income-statement-growth/${symbol}?limit=10&apikey=${FMPAPI_KEY}`
         ),
         fetch(
-          `https://fmpcloud.io/api/v3/key-metrics/${symbol}?limit=11&apikey=${FMPAPI_KEY}`
-        ), //Need 11 roic data points to be able to calculate 10 columns of growth
+          `https://fmpcloud.io/api/v3/key-metrics/${symbol}?limit=10&apikey=${FMPAPI_KEY}`
+        ),
         fetch(
           `https://fmpcloud.io/api/v3/balance-sheet-statement-growth/${symbol}?limit=10&apikey=${FMPAPI_KEY}`
         ),

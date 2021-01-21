@@ -7,24 +7,18 @@ import {
 } from "@material-ui/core";
 import { StyledTableCell, StyledTableRow } from "../components/EllenTable";
 
-interface TableDataInterface {
-  title?: string;
-  data?: string[];
-}
-
 interface FmpIncomeGrowthInterface {
-  growthRevenue?: number;
-  growthEPS?: number;
+  [key: string]: number | undefined; //growthRevenue?
+  //[key: string]: number | undefined; //growthEPS?
 }
 interface FmpCashGrowthInterface {
-  growthFreeCashFlow?: number;
+  [key: string]: number | undefined; //growthFreeCashFlow?
 }
 interface FmpBalanceGrowthInterface {
-  growthTotalStockholdersEquity?: number;
+  [key: string]: number | undefined; //growthTotalStockholdersEquity?
 }
 interface FmpKeyMetricInterface {
-  date?: string;
-  roic?: number;
+  [key: string]: number | undefined; //roic?
 }
 
 interface Props {
@@ -45,24 +39,57 @@ const QuintonContent: React.FC<Props> = React.memo(
     isLoading,
     isError,
   }) => {
-    /**
-     * ROIC
-     * Revenue
-     * EPS
-     * Equity
-     * FreeCashFlow
-     */
+    const [tableData, setTableData] = React.useState<Array<Array<string>>>([]);
 
-    const [tableData, setTableData] = React.useState<Array<TableDataInterface>>(
-      []
-    );
+    React.useEffect(() => {
+      const nextData: Array<Array<string>> = [];
 
-    React.useEffect(() => {}, [
-      fmpIncomeGrowth,
-      fmpCashGrowth,
-      fmpBalanceGrowth,
-      fmpKeyMetrics,
-    ]);
+      const DataFillingMetrics = [
+        { title: "ROIC", dataSource: fmpKeyMetrics, dataAttribute: "roic" },
+        {
+          title: "Revenue",
+          dataSource: fmpIncomeGrowth,
+          dataAttribute: "growthRevenue",
+        },
+        {
+          title: "EPS",
+          dataSource: fmpIncomeGrowth,
+          dataAttribute: "growthEPS",
+        },
+        {
+          title: "Equity",
+          dataSource: fmpBalanceGrowth,
+          dataAttribute: "growthTotalStockholdersEquity",
+        },
+        {
+          title: "FreeCashFlow",
+          dataSource: fmpCashGrowth,
+          dataAttribute: "growthFreeCashFlow",
+        },
+      ];
+
+      for (let dataColumn of DataFillingMetrics) {
+        nextData.push([]);
+        nextData[nextData.length - 1].push(dataColumn.title);
+        for (let i = 0; i < 10; ++i) {
+          if (
+            i < dataColumn.dataSource.length &&
+            dataColumn.dataSource[i][dataColumn.dataAttribute] &&
+            dataColumn.dataSource[i][dataColumn.dataAttribute] !== undefined
+          ) {
+            nextData[nextData.length - 1].push(
+              (
+                dataColumn.dataSource[i][dataColumn.dataAttribute]! * 100
+              ).toFixed(0)
+            );
+          } else {
+            nextData[nextData.length - 1].push("NA");
+          }
+        }
+      }
+
+      setTableData(nextData);
+    }, [fmpIncomeGrowth, fmpCashGrowth, fmpBalanceGrowth, fmpKeyMetrics]);
 
     if (isError) {
       return (
@@ -87,20 +114,11 @@ const QuintonContent: React.FC<Props> = React.memo(
           <TableContainer>
             <Table>
               <TableBody>
-                {[
-                  { date: "2020-01-19", dividend: 0.24, share: 2.4, yild: 24 },
-                ].map((row) => (
-                  <StyledTableRow key={row.date}>
-                    <StyledTableCell>{row.date}</StyledTableCell>
-                    <StyledTableCell align="right">
-                      {"$ " + row.dividend}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {"$ " + row.share}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {row.yild + " %"}
-                    </StyledTableCell>
+                {tableData.map((row) => (
+                  <StyledTableRow key={row[0]}>
+                    {row.map((cell) => (
+                      <StyledTableCell>{cell}</StyledTableCell>
+                    ))}
                   </StyledTableRow>
                 ))}
               </TableBody>
