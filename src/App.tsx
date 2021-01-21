@@ -67,11 +67,11 @@ export default function App() {
       setIsLoading(true);
       if (inDev) {
         setIsLoading(false);
+        setIsError(false);
         setFMPIncomeGrowth(SampleFMPIncomeGrowth);
         setFMPBalanceGrowth(SampleFMPBalanceGrowth);
         setFMPCashGrowth(SampleFMPCashGrowth);
         setFMPKeyMetrics(SampleFMPKeyMetrics);
-        setIsError(false);
         return;
       }
 

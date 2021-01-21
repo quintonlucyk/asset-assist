@@ -20,7 +20,7 @@ interface EllenTableProps {
 
 const emptyArray: number[] = [];
 
-const StyledTableCell = withStyles((theme: Theme) =>
+export const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
     head: {
       backgroundColor: theme.palette.warning.light,
@@ -31,7 +31,7 @@ const StyledTableCell = withStyles((theme: Theme) =>
   })
 )(TableCell);
 
-const StyledTableRow = withStyles((theme: Theme) =>
+export const StyledTableRow = withStyles((theme: Theme) =>
   createStyles({
     root: {
       "&:nth-of-type(odd)": {
