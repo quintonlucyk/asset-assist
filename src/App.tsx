@@ -17,7 +17,7 @@ export default function App() {
   const [isError, setIsError] = React.useState(false);
 
   React.useEffect(() => {
-    const fetchHistoricalData = async (symbol: string) => {
+    const fetchEllenHistoricalData = async (symbol: string) => {
       const RAPIDAPI_KEY = process.env.REACT_APP_RAPIDAPI_KEY || "";
       setIsLoading(true);
       try {
@@ -53,9 +53,8 @@ export default function App() {
         setData({});
       }
     };
-
-    if (!!symbol) {
-      fetchHistoricalData(symbol);
+    if (!!symbol && window.location.hash.includes("ellen")) {
+      fetchEllenHistoricalData(symbol);
     }
   }, [symbol]);
 
